@@ -1,0 +1,337 @@
+openapi: 3.0.0
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/yousefsalah-512/Books/1.0.0
+info:
+  version: "1.0.0"
+  title: Books-Shop
+  description: The API for the EatBacon IOT project
+paths:
+  /register:
+    post:
+      tags:
+        - Register
+      operationId: registerUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+      responses:
+        '200':
+          description: successfully registered device
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegisterResponse'
+        '400':
+          description: requierd error auth
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegisterErrorResponse'
+        '500':
+          description: errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegisterErrorResponse'
+  /api/books:
+    get:
+      tags:
+        - Books
+      operationId: getAllBooks
+      summary: get list of all books
+      responses:
+        '200':
+          description: response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        '500':
+          description: responseError
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseError'
+   
+    post:
+      tags:
+        - Books
+      summary: Create a new book
+      operationId: createBook
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createBook'
+      responses:
+        '200':
+          description: success 200
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateBooksuccess'
+        '400':
+          description: error 400
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateBookErrors'
+        '500':
+          description: error 500
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateBookError500'
+  /api/books/{Id}:
+    get:
+      tags:
+        - Books
+      operationId: getBook
+      summary: get book by ID
+      parameters:
+        - name: Id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success 200
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getOneBook'
+        '404':
+          description: error 404
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getOneBook404'
+        '500':
+          description: error 500
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getOneBook500'
+    put:
+      tags:
+        - Books
+      operationId: updateBook
+      summary: update Book by ID
+      parameters:
+        - name: Id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/updateBook'
+      responses:
+        '200':
+          description: success 200
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/updateBook200'
+        '404':
+          description: error 404
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/updateBook404'
+        '500':
+          description: success 500
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/updateBook500'
+    delete:
+      tags:
+        - Books
+      operationId: deleteBook
+      summary: delete book by ID
+      parameters:
+        - name: Id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success 200
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/deleteBook200'
+        '404':
+          description: error 404
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/deleteBook404'
+        '500':
+          description: success 500
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/deleteBook500'
+components:
+  schemas:
+    RegisterRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          example: 'yousef@example.com'
+        password:
+          type: string
+          format: password
+          example: 123456ys
+        confirmPassword:
+          type: string
+          format: password
+          example: 123456ys
+      required:
+        - email
+        - password
+        - confirmPassword
+    RegisterResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: registered successfuly
+    RegisterErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: failed to register user
+    createBook:
+      type: object
+      properties:
+        title:
+          type: string
+          example: Arses
+        description:
+          type: string
+          example: Science fiction novel
+        price:
+          type: integer
+          format: int64
+          example: 90
+      required: 
+        - title
+    CreateBooksuccess:
+      type: object
+      properties:
+        message:
+          type: string
+          example: book created successfully
+    CreateBookErrors:
+      type: object
+      properties:
+        message:
+          type: string
+          example: 400 invalid request, title is required
+    CreateBookError500:
+      type: object
+      properties:
+        message:
+          type: string
+          example: failed to create book
+    ApiResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: books retrieved successfully
+    ApiResponseError:
+      type: object
+      properties:
+        message:
+          type: string
+          example: failed to get books
+    getOneBook:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        price:
+          type: integer
+          format: int32
+    getOneBook404:
+      type: object
+      properties:
+        message:
+          type: string
+          example: 404 not found
+    getOneBook500:
+      type: object
+      properties:
+        message:
+          type: string
+          example: failed to get book
+    updateBook:
+      properties:
+        title:
+          type: string
+          example: Arses
+        description:
+          type: string
+          example: Science fiction novel
+        price:
+          type: integer
+          format: int64
+          example: 90
+      required: 
+        - title
+    updateBook200:
+      type: object
+      properties:
+        message:
+          type: string
+          example: book updated successfully
+    updateBook404:
+      type: object
+      properties:
+        message:
+          type: string
+          example: 404 not found
+    updateBook500:
+      type: object
+      properties:
+        message:
+          type: string
+          example: failed to update book
+    deleteBook200:
+      type: object
+      properties:
+        message:
+          type: string
+          example: book deleted successfully
+    deleteBook404:
+      type: object
+      properties:
+        message:
+          type: string
+          example: 404 not found
+    deleteBook500:
+      type: object
+      properties:
+        message:
+          type: string
+          example: failed to delete book
